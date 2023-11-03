@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 
 import MainNavigation from "./components/Navigation/MainNavigation";
 import Base from "./components/Pages/Base";
-import { Grid } from "@mui/material";
 import Progress from "./utils/Progress";
-import TwoColumnForm from "./components/Pages/temp";
+import PageContext from "./context/PageContext";
+import { ProgressContext } from "./context/ProgressContext";
 
 const App = () => {
+  const pageContext = useContext(PageContext);
+  const progressContext = useContext(ProgressContext);
+
+  const setPage = (newPage) => {
+    pageContext.page = newPage;
+  };
+
+  const setProgress = (newProgress) => {
+    progressContext.progress = newProgress;
+    setPrg(progressContext.progress);
+  };
+
+  const [prg, setPrg] = useState(progressContext.progress);
+
   return (
-    <div>
-      <MainNavigation />
-      <Progress progress={10} />
-      {/* <TwoColumnForm /> */}
-      {/* <Grid container spacing={2}>
-        <Grid item xs={8}> */}
-      <Base />
-      {/* </Grid> */}
-      {/* </Grid> */}
-    </div>
+    <PageContext.Provider value={{ page: pageContext.page, setPage: setPage }}>
+      <ProgressContext.Provider
+        value={{ progress: progressContext.progress, setProgress: setProgress }}
+      >
+        <MainNavigation />
+        <Progress progress={prg} />
+        <Base />
+      </ProgressContext.Provider>
+    </PageContext.Provider>
   );
 };
 

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { TextField, InputAdornment, Button } from "@mui/material";
 
 import { EducationLabels } from "../../utils/EducationLabels";
+import PageContext from "../../context/PageContext";
+import { ProgressContext } from "../../context/ProgressContext";
 
 const pairs = [];
 
@@ -18,7 +20,24 @@ for (let i = 0; i < EducationLabels.length; i += 5) {
   pairs.push(pair);
 }
 
-const Education = () => {
+const Education = (props) => {
+  const pageContext = useContext(PageContext);
+  const progressContext = useContext(ProgressContext);
+
+  const nextPageHandler = () => {
+    pageContext.setPage(3);
+    props.setPage(3);
+    progressContext.setProgress(60);
+    console.log("next page", progressContext.progress);
+  };
+
+  const previousPageHandler = () => {
+    pageContext.setPage(1);
+    props.setPage(1);
+    progressContext.setProgress(20);
+    console.log("next page", progressContext.progress);
+  };
+
   return (
     <form className="mt-8">
       {pairs.map((pair) => {
@@ -114,10 +133,10 @@ const Education = () => {
         );
       })}
       <div className="flex flex-row justify-evenly mt-4">
-        <Button variant="outlined" size="small">
+        <Button variant="outlined" size="small" onClick={previousPageHandler}>
           Previous
         </Button>
-        <Button variant="contained" size="small">
+        <Button variant="contained" size="small" onClick={nextPageHandler}>
           Next
         </Button>
       </div>

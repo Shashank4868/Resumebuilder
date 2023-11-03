@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   TextField,
@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import PageContext from "../../context/PageContext";
+import { ProgressContext } from "../../context/ProgressContext";
 
 let i = 1;
 
@@ -22,9 +24,24 @@ const allExperiences = [
   },
 ];
 
-const Projects = () => {
+const Projects = (props) => {
   const [experiences, setExperiences] = useState(allExperiences);
   const [showSnackBar, setShowSnackBar] = useState(false);
+
+  const pageContext = useContext(PageContext);
+  const progressContext = useContext(ProgressContext);
+
+  const nextPageHandler = () => {
+    pageContext.setPage(4);
+    props.setPage(4);
+    progressContext.setProgress(80);
+  };
+
+  const previousPageHandler = () => {
+    pageContext.setPage(2);
+    props.setPage(2);
+    progressContext.setProgress(40);
+  };
 
   const addMoreProjectsHandler = () => {
     const newExperience = {
@@ -132,6 +149,14 @@ const Projects = () => {
           onClick={addMoreProjectsHandler}
         >
           Add More
+        </Button>
+      </div>
+      <div className="flex flex-row justify-evenly mt-4">
+        <Button variant="outlined" size="small" onClick={previousPageHandler}>
+          Previous
+        </Button>
+        <Button variant="contained" size="small" onClick={nextPageHandler}>
+          Next
         </Button>
       </div>
       <Snackbar
